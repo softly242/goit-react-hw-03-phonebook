@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 
+
 class App extends Component {
   state = {
     contacts: [
@@ -14,6 +15,23 @@ class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    console.log('mount')
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+   
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   handleFilterChange = e => {
     this.setState({ filter: e.target.value });
